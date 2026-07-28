@@ -5,4 +5,5 @@ const products = [
 {name: "laptop",price: "500.00 $",image: ""},
 {name: "t",price: "22.00 $",image: ""},
 {name: "f",price: "5.00 $",image: ""},
+{name: "eee",price: "111.00 $",image: ""},
 ];
