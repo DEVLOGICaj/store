@@ -20,26 +20,40 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 0;
         }
 
         header {
+            background: #1e293b;
+            border-bottom: 2px solid #334155;
             text-align: center;
+            padding: 25px 15px;
             margin-bottom: 30px;
             width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             background: linear-gradient(to right, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         p.subtitle {
             color: #94a3b8;
-            font-size: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
         }
 
         .grid-container {
@@ -47,7 +61,6 @@
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 15px;
             width: 100%;
-            max-width: 1100px;
         }
 
         .product-card {
@@ -131,11 +144,6 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .qty-btn:active {
-            background: #475569;
         }
 
         .qty-value {
@@ -162,11 +170,6 @@
             font-size: 0.9rem;
             flex: 1;
             text-align: center;
-            transition: opacity 0.2s;
-        }
-
-        .buy-btn:active {
-            opacity: 0.85;
         }
 
         .cart-btn {
@@ -174,29 +177,159 @@
         }
 
         .cart-float-container {
-            margin-top: 30px;
-            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
             width: 100%;
-            max-width: 1100px;
+            max-width: 400px;
+        }
+
+        .cart-action-btn {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
         }
 
         .send-cart-btn {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 14px 20px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             font-size: 1.1rem;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
             width: 100%;
-            max-width: 400px;
-            transition: transform 0.2s;
         }
 
-        .send-cart-btn:active {
-            transform: scale(0.98);
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 450px;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+            gap: 10px;
+        }
+
+        .remove-item-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #334155;
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #38bdf8;
+        }
+
+        footer {
+            background-color: #064e3b;
+            color: #ecfdf5;
+            width: 100%;
+            padding: 40px 20px 20px;
+            margin-top: 50px;
+            border-top: 3px solid #047857;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #34d399;
+        }
+
+        .footer-desc {
+            color: #a7f3d0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #047857;
+            width: 100%;
+            padding-top: 15px;
+            color: #6ee7b7;
+            font-size: 0.85rem;
         }
 
         .empty-state {
@@ -206,39 +339,59 @@
             font-size: 1.1rem;
             padding: 40px;
         }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 15px 10px;
-            }
-            h1 {
-                font-size: 1.75rem;
-            }
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>متجري الإلكتروني</h1>
-        <p class="subtitle">أحدث المنتجات المتوفرة حالياً</p>
+        <p class="subtitle">أحدث المنتجات المتوفرة حالياً بكل تميز وجودة</p>
     </header>
 
-    <div class="grid-container" id="products-container"></div>
+    <div class="main-content">
+        <div class="grid-container" id="products-container"></div>
 
-    <div class="cart-float-container" id="cart-section" style="display: none;">
-        <button onclick="sendCart()" class="send-cart-btn">
-            🛒 إرسال السلة الكاملة عبر واتساب
-        </button>
+        <div class="cart-float-container" id="cart-section" style="display: none;">
+            <button onclick="showCartModal()" class="cart-action-btn">
+                🛍️ عرض محتويات السلة وحساب المجموع
+            </button>
+            <button onclick="sendCart()" class="send-cart-btn">
+                🛒 إرسال السلة الكاملة عبر واتساب
+            </button>
+        </div>
     </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>محتويات السلة</span>
+                <button class="close-modal" onclick="closeCartModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-cart-items"></div>
+            <div class="modal-footer">
+                <span>المجموع الكلي:</span>
+                <span id="modal-total-price">0</span>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">متجري الإلكتروني</div>
+            <div class="footer-desc">نعمل على تقديم أفضل المنتجات والخدمات المتميزة لضمان رضاكم، مع الالتزام بمعايير الجودة والسرعة في تلبية الطلبات عبر واتساب.</div>
+        </div>
+        <div class="footer-bottom">
+            جميع الحقوق محفوظة © 2026
+        </div>
+    </footer>
+
     <script src="products.js"></script>
 
     <script>
         const container = document.getElementById("products-container");
         const cartSection = document.getElementById("cart-section");
+        const cartModal = document.getElementById("cartModal");
+        const modalCartItems = document.getElementById("modal-cart-items");
+        const modalTotalPrice = document.getElementById("modal-total-price");
         const ownerPhone = "963946887715";
         let cart = [];
 
@@ -265,6 +418,8 @@
 
         function addToCart(name, price, id) {
             let qty = parseInt(document.getElementById("qty-" + id).innerText);
+            let numericPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+
             let item = cart.find(x => x.name == name);
 
             if (item) {
@@ -272,7 +427,8 @@
             } else {
                 cart.push({
                     name: name,
-                    price: price,
+                    priceStr: price,
+                    priceNum: numericPrice,
                     qty: qty
                 });
             }
@@ -283,10 +439,53 @@
 
         function updateCartUI() {
             if (cart.length > 0) {
-                cartSection.style.display = "block";
+                cartSection.style.display = "flex";
             } else {
                 cartSection.style.display = "none";
+                closeCartModal();
             }
+        }
+
+        // دالة حذف منتج من السلة وتحديث النافذة والمجموع فورا
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+            if (cart.length > 0) {
+                showCartModal(); // إعادة تحديث محتوى النافذة والمجموع
+            }
+        }
+
+        function showCartModal() {
+            if (cart.length == 0) {
+                alert("السلة فارغة!");
+                closeCartModal();
+                return;
+            }
+
+            modalCartItems.innerHTML = "";
+            let total = 0;
+
+            cart.forEach((p, index) => {
+                let itemTotal = p.priceNum * p.qty;
+                total += itemTotal;
+
+                modalCartItems.innerHTML += `
+                    <div class="cart-item-row">
+                        <div>
+                            <strong>${p.name}</strong><br>
+                            <span style="color: #94a3b8; font-size: 0.85rem;">الكمية: ${p.qty} | السعر: ${itemTotal}</span>
+                        </div>
+                        <button class="remove-item-btn" onclick="removeFromCart(${index})">حذف</button>
+                    </div>
+                `;
+            });
+
+            modalTotalPrice.innerText = total;
+            cartModal.style.display = "flex";
+        }
+
+        function closeCartModal() {
+            cartModal.style.display = "none";
         }
 
         function sendCart() {
@@ -296,10 +495,15 @@
             }
 
             let text = "مرحباً، أريد طلب المنتجات التالية:\n\n";
+            let total = 0;
 
             cart.forEach((p, i) => {
-                text += `${i + 1}- ${p.name}\nالكمية: ${p.qty}\nالسعر: ${p.price}\n------------------\n`;
+                let itemTotal = p.priceNum * p.qty;
+                total += itemTotal;
+                text += `${i + 1}- ${p.name}\nالكمية: ${p.qty}\nالسعر: ${p.priceStr}\n------------------\n`;
             });
+
+            text += `\nالمجموع الكلي: ${total}`;
 
             let whatsappUrl = `https://wa.me/${ownerPhone}?text=` + encodeURIComponent(text);
             window.open(whatsappUrl, '_blank');
