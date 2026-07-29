@@ -94,11 +94,17 @@
 
         .product-footer {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 12px;
             margin-top: 15px;
             border-top: 1px solid #334155;
             padding-top: 12px;
+        }
+
+        .product-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .price {
@@ -107,18 +113,90 @@
             color: #38bdf8;
         }
 
+        .qty-container {
+            display: flex;
+            align-items: center;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            background: #334155;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .qty-btn:active {
+            background: #475569;
+        }
+
+        .qty-value {
+            padding: 0 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 8px;
+        }
+
         .buy-btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
-            font-size: 0.95rem;
-            display: inline-block;
+            font-size: 0.9rem;
+            flex: 1;
             text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .buy-btn:active {
+            opacity: 0.85;
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+        }
+
+        .cart-float-container {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .send-cart-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.2s;
+        }
+
+        .send-cart-btn:active {
+            transform: scale(0.98);
         }
 
         .empty-state {
@@ -129,7 +207,6 @@
             padding: 40px;
         }
 
-        /* تحسينات إضافية خاصة بالشاشات الصغيرة جداً */
         @media (max-width: 480px) {
             body {
                 padding: 15px 10px;
@@ -152,19 +229,87 @@
 
     <div class="grid-container" id="products-container"></div>
 
-    <script src="products.js?V=2"></script>
+    <div class="cart-float-container" id="cart-section" style="display: none;">
+        <button onclick="sendCart()" class="send-cart-btn">
+            🛒 إرسال السلة الكاملة عبر واتساب
+        </button>
+    </div>
+    <script src="products.js"></script>
 
     <script>
         const container = document.getElementById("products-container");
+        const cartSection = document.getElementById("cart-section");
         const ownerPhone = "963946887715";
+        let cart = [];
+
+        function increaseQty(id) {
+            let qtyEl = document.getElementById("qty-" + id);
+            let current = parseInt(qtyEl.innerText);
+            qtyEl.innerText = current + 1;
+        }
+
+        function decreaseQty(id) {
+            let qtyEl = document.getElementById("qty-" + id);
+            let current = parseInt(qtyEl.innerText);
+            if (current > 1) {
+                qtyEl.innerText = current - 1;
+            }
+        }
+
+        function sendWhatsApp(name, price, id) {
+            let qty = parseInt(document.getElementById("qty-" + id).innerText);
+            let message = encodeURIComponent(`مرحباً، أريد شراء هذا المنتج:\nالاسم: ${name}\nالسعر: ${price}\nالكمية: ${qty}`);
+            let whatsappUrl = `https://wa.me/${ownerPhone}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function addToCart(name, price, id) {
+            let qty = parseInt(document.getElementById("qty-" + id).innerText);
+            let item = cart.find(x => x.name == name);
+
+            if (item) {
+                item.qty += qty;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    qty: qty
+                });
+            }
+
+            updateCartUI();
+            alert("تمت إضافة المنتج إلى السلة بنجاح! 🛒");
+        }
+
+        function updateCartUI() {
+            if (cart.length > 0) {
+                cartSection.style.display = "block";
+            } else {
+                cartSection.style.display = "none";
+            }
+        }
+
+        function sendCart() {
+            if (cart.length == 0) {
+                alert("السلة فارغة!");
+                return;
+            }
+
+            let text = "مرحباً، أريد طلب المنتجات التالية:\n\n";
+
+            cart.forEach((p, i) => {
+                text += `${i + 1}- ${p.name}\nالكمية: ${p.qty}\nالسعر: ${p.price}\n------------------\n`;
+            });
+
+            let whatsappUrl = `https://wa.me/${ownerPhone}?text=` + encodeURIComponent(text);
+            window.open(whatsappUrl, '_blank');
+        }
 
         if (typeof products !== "undefined" && products.length > 0) {
             container.innerHTML = "";
-            products.forEach(p => {
+            products.forEach((p, index) => {
                 let imagePath = p.image && p.image.trim() !== "" ? p.image : "https://via.placeholder.com/300x180?text=No+Image";
-
-                let message = encodeURIComponent(`مرحباً، أريد شراء هذا المنتج:\nالاسم: ${p.name}\nالسعر: ${p.price}`);
-                let whatsappUrl = `https://wa.me/${ownerPhone}?text=${message}`;
+                let productId = index;
 
                 container.innerHTML += `
                     <div class="product-card">
@@ -174,8 +319,22 @@
                         <div class="product-content">
                             <div class="product-title">${p.name}</div>
                             <div class="product-footer">
-                                <span class="price">${p.price}</span>
-                                <a href="${whatsappUrl}" target="_blank" class="buy-btn">شراء عبر الواتس</a>
+                                <div class="product-info-row">
+                                    <span class="price">${p.price}</span>
+                                    <div class="qty-container">
+                                        <button class="qty-btn" onclick="decreaseQty(${productId})">-</button>
+                                        <span class="qty-value" id="qty-${productId}">1</span>
+                                        <button class="qty-btn" onclick="increaseQty(${productId})">+</button>
+                                    </div>
+                                </div>
+                                <div class="actions-row">
+                                    <button onclick="addToCart('${p.name}', '${p.price}', ${productId})" class="buy-btn cart-btn">
+                                        أضف للسلة
+                                    </button>
+                                    <button onclick="sendWhatsApp('${p.name}', '${p.price}', ${productId})" class="buy-btn">
+                                        شراء مباشر
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
