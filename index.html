@@ -1,40 +1,647 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>متجري الإلكتروني</title>
+    <title>سوق الهواتف المستعملة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-header: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --price-color: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+            --input-bg: #0f172a;
+            --footer-bg: #064e3b;
+            --footer-text: #ecfdf5;
+            --modal-bg: #1e293b;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f1f5f9;
+            --bg-header: #ffffff;
+            --border-color: #cbd5e1;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --price-color: #0284c7;
+            --accent-gradient: linear-gradient(135deg, #0284c7, #4f46e5);
+            --input-bg: #f8fafc;
+            --footer-bg: #1e293b;
+            --footer-text: #f8fafc;
+            --modal-bg: #ffffff;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0;
         }
 
         header {
-            background: #1e293b;
-            border-bottom: 2px solid #334155;
-            text-align: center;
-            padding: 25px 15px;
-            margin-bottom: 30px;
+            background: var(--bg-header);
+            border-bottom: 2px solid var(--border-color);
             width: 100%;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* زر الترس وقائمة الإعدادات */
+        .settings-container {
+            position: relative;
+        }
+
+        .gear-btn {
+            background: var(--border-color);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gear-btn:hover {
+            transform: rotate(45deg);
+        }
+
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 55px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 180px;
+            padding: 10px;
+            z-index: 101;
+        }
+
+        .settings-dropdown.active {
+            display: block;
+        }
+
+        .theme-toggle-option {
+            background: none;
+            border: none;
+            width: 100%;
+            padding: 10px 12px;
+            text-align: right;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .theme-toggle-option:hover {
+            background: var(--border-color);
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 1200px;
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* شريط الفلتر المطور */
+        .filter-wrapper {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 18px 20px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-wrapper label {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 1.05rem;
+        }
+
+        .filter-wrapper input {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-size: 1rem;
+            flex: 1;
+            max-width: 350px;
+            outline: none;
+        }
+
+        .filter-wrapper input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-img-container {
+            width: 100%;
+            height: 200px;
+            background: var(--input-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-content {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .product-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .product-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--price-color);
+        }
+
+        .qty-container {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            background: var(--border-color);
+            color: var(--text-main);
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .qty-value {
+            padding: 0 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+        }
+
+        .cart-float-container {
+            margin: 40px 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .cart-action-btn {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.05rem;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .send-cart-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 480px;
+            color: var(--text-main);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .modal-header {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            gap: 12px;
+        }
+
+        .remove-item-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--price-color);
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            width: 100%;
+            padding: 40px 20px 20px;
+            margin-top: 60px;
+            border-top: 3px solid #047857;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .footer-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: #34d399;
+        }
+
+        .footer-desc {
+            color: #a7f3d0;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #047857;
+            width: 100%;
+            padding-top: 18px;
+            color: #6ee7b7;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-brand">
+            <h1>سوق الهواتف المستعملة</h1>
+            <p class="subtitle">منصتك الموثوقة لبيع وشراء الهواتف</p>
+        </div>
+        <!-- زر الترس وقائمة الثيم -->
+        <div class="settings-container">
+            <button class="gear-btn" onclick="toggleSettingsMenu(event)" title="الإعدادات">⚙️</button>
+            <div class="settings-dropdown" id="settingsDropdown">
+                <button class="theme-toggle-option" onclick="switchTheme()">
+                    <span id="themeIcon">☀️</span> <span id="themeText">الوضع الفاتح</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- شريط الفلتر الذكي -->
+        <div class="filter-wrapper">
+            <label for="maxPriceInput">فلتر الميزانية:</label>
+            <input type="number" id="maxPriceInput" placeholder="اكتب السعر الأعلى (مثلاً: 200)..." oninput="filterProductsByPrice()">
+        </div>
+
+        <div class="grid-container" id="products-container"></div>
+
+        <div class="cart-float-container" id="cart-section" style="display: none;">
+            <button onclick="showCartModal()" class="cart-action-btn">
+                🛍️ عرض محتويات السلة وحساب المجموع
+            </button>
+            <button onclick="sendCart()" class="send-cart-btn">
+                🛒 إرسال السلة الكاملة عبر واتساب
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>محتويات السلة</span>
+                <button class="close-modal" onclick="closeCartModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-cart-items"></div>
+            <div class="modal-footer">
+                <span>المجموع الكلي:</span>
+                <span id="modal-total-price">0</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">سوق الهواتف المستعملة</div>
+            <div class="footer-desc">نعمل على تسهيل بيع وشراء الأجهزة المستعملة بكل أمان وشفافية وبأفضل الأسعار عبر التواصل المباشر.</div>
+        </div>
+        <div class="footer-bottom">
+            جميع الحقوق محفوظة © 2026
+        </div>
+    </footer>
+
+    <!-- ربط ملف المنتجات الخارجي إن وجد، أو تضمينه هنا -->
+    <script src="products.js"></script>
+
+    <script>
+        // إدارة الثيم (ليلي / نهاري)
+        const htmlElement = document.documentElement;
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+        const settingsDropdown = document.getElementById("settingsDropdown");
+
+        function toggleSettingsMenu(event) {
+            event.stopPropagation();
+            settingsDropdown.classList.toggle("active");
+        }
+
+        // إغلاق القائمة عند النقر في أي مكان خارجها
+        window.addEventListener("click", () => {
+            settingsDropdown.classList.remove("active");
+        });
+
+        function switchTheme() {
+            const currentTheme = htmlElement.getAttribute("data-theme");
+            if (currentTheme === "dark") {
+                htmlElement.setAttribute("data-theme", "light");
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "الوضع الليلي";
+                localStorage.setItem("theme", "light");
+            } else {
+                htmlElement.setAttribute("data-theme", "dark");
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "الوضع الفاتح";
+                localStorage.setItem("theme", "dark");
+            }
+        }
+
+        // استرجاع الثيم المحفوظ مسبقاً
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            htmlElement.setAttribute("data-theme", savedTheme);
+            if (savedTheme === "light") {
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "الوضع الليلي";
+            } else {
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "الوضع الفاتح";
+            }
+        }
+
+        const container = document.getElementById("products-container");
+        const cartSection = document.getElementById("cart-section");
+        const cartModal = document.getElementById("cartModal");
+        const modalCartItems = document.getElementById("modal-cart-items");
+        const modalTotalPrice = document.getElementById("modal-total-price");
+        const ownerPhone = "963946887715";
+        let cart = [];
+
+        function getNumericPrice(priceStr) {
+            return parseFloat(String(priceStr).replace(/[^0-9.]/g, '')) || 0;
+        }
+
+        function renderProducts(productsToDisplay) {
+            if (!productsToDisplay || productsToDisplay.length === 0) {
+                container.innerHTML = `<div class="empty-state">لا توجد منتجات مطابقة لميزانيتك حالياً.</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            productsToDisplay.forEach((p, index) => {
+                let imagePath = p.image && p.image.trim() !== "" ? p.image : "https://via.placeholder.com/300x180?text=No+Image";
+                let productId = index;
+
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-img-container">
+                            <img src="${imagePath}" alt="${p.name}" class="product-img" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
+                        </div>
+                        <div class="product-content">
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-footer">
+                                <div class="product-info-row">
+                                    <span class="price">${p.price}</span>
+                                    <div class="qty-container">
+                                        <button class="qty-btn" onclick="decreaseQty(${productId})">-</button>
+                                        <span class="qty-value" id="qty-${productId}">1</span>
+                                        <button class="qty-btn" onclick="increaseQty(${productId})">+</button>
+                                    </div>
+                                </div>
+                              font-size: 2.2rem;
             background: linear-gradient(to right, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
