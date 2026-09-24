@@ -1,40 +1,1140 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>سوق الهواتف المستعملة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     <style>
+
+        /* =========================
+           VARIABLES
+        ========================= */
+
         :root {
-            --bg-body: #090d16;
-            --bg-header: #111827;
-            --border-color: #1f2937;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --card-bg: #111827;
-            --card-border: #1f2937;
-            --price-color: #38bdf8;
-            --accent-gradient: linear-gradient(135deg, #38bdf8, #6366f1);
-            --input-bg: #030712;
-            --footer-bg: #030712;
-            --footer-text: #9ca3af;
-            --modal-bg: #111827;
+            --bg: #070b14;
+            --bg-secondary: #0d1321;
+            --card: rgba(17, 24, 39, 0.82);
+            --card-solid: #111827;
+
+            --border: rgba(255,255,255,0.08);
+
+            --text: #f8fafc;
+            --muted: #94a3b8;
+
+            --primary: #38bdf8;
+            --primary-2: #6366f1;
+
+            --green: #22c55e;
+            --gold: #f59e0b;
+
+            --input: #080d18;
+
+            --shadow:
+                0 20px 60px rgba(0,0,0,0.35);
+
+            --gradient:
+                linear-gradient(135deg,#38bdf8,#6366f1);
+
+            --hero-gradient:
+                radial-gradient(circle at 20% 20%,rgba(56,189,248,.18),transparent 35%),
+                radial-gradient(circle at 80% 30%,rgba(99,102,241,.20),transparent 35%),
+                radial-gradient(circle at 50% 100%,rgba(14,165,233,.12),transparent 40%);
         }
 
         [data-theme="light"] {
-            --bg-body: #f8fafc;
-            --bg-header: #ffffff;
-            --border-color: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --card-bg: #ffffff;
-            --card-border: #e2e8f0;
-            --price-color: #0284c7;
-            --accent-gradient: linear-gradient(135deg, #0284c7, #4f46e5);
-            --input-bg: #f1f5f9;
-            --footer-bg: #1e293b;
-            --footer-text: #f8fafc;
+
+            --bg: #f5f7fb;
+            --bg-secondary: #ffffff;
+
+            --card: rgba(255,255,255,.88);
+            --card-solid: #ffffff;
+
+            --border: #e2e8f0;
+
+            --text: #0f172a;
+            --muted: #64748b;
+
+            --primary: #0284c7;
+            --primary-2: #4f46e5;
+
+            --input: #f1f5f9;
+
+            --shadow:
+                0 18px 45px rgba(15,23,42,.10);
+
+            --gradient:
+                linear-gradient(135deg,#0284c7,#4f46e5);
+
+            --hero-gradient:
+                radial-gradient(circle at 20% 20%,rgba(14,165,233,.12),transparent 35%),
+                radial-gradient(circle at 80% 30%,rgba(79,70,229,.10),transparent 35%);
+        }
+
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                var(--hero-gradient),
+                var(--bg);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            transition:
+                background .3s ease,
+                color .3s ease;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            width: 100%;
+
+            background: rgba(7,11,20,.78);
+
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid var(--border);
+
+            transition: .3s;
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255,255,255,.82);
+        }
+
+        .header-inner {
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 17px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .brand-logo {
+
+            width: 48px;
+            height: 48px;
+
+            border-radius: 15px;
+
+            background: var(--gradient);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(56,189,248,.20);
+        }
+
+        .brand-text h1 {
+
+            font-size: 1.25rem;
+
+            font-weight: 900;
+
+            background: var(--gradient);
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+
+            color: var(--muted);
+
+            font-size: .75rem;
+        }
+
+
+        /* =========================
+           THEME BUTTON
+        ========================= */
+
+        .theme-btn {
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            border: 1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            font-size: 20px;
+
+            transition: .25s;
+        }
+
+        .theme-btn:hover {
+
+            transform: rotate(15deg) scale(1.06);
+
+            border-color: var(--primary);
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 75px 20px 50px;
+
+            min-height: 570px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .hero-content {
+
+            max-width: 800px;
+
+            animation: heroIn .8s ease;
+        }
+
+        @keyframes heroIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px 15px;
+
+            border-radius: 50px;
+
+            background: rgba(56,189,248,.08);
+
+            border: 1px solid rgba(56,189,248,.20);
+
+            color: var(--primary);
+
+            font-size: .85rem;
+
+            margin-bottom: 22px;
+        }
+
+        .hero h2 {
+
+            font-size: clamp(2.2rem,6vw,4.5rem);
+
+            line-height: 1.15;
+
+            font-weight: 900;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h2 span {
+
+            background: var(--gradient);
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+
+            color: var(--muted);
+
+            font-size: 1.05rem;
+
+            line-height: 2;
+
+            max-width: 650px;
+
+            margin: auto auto 32px;
+        }
+
+        .browse-btn {
+
+            border: none;
+
+            color: white;
+
+            background: var(--gradient);
+
+            padding: 15px 34px;
+
+            border-radius: 14px;
+
+            font-size: 1rem;
+
+            font-weight: 800;
+
+            box-shadow:
+                0 12px 35px rgba(56,189,248,.22);
+
+            transition: .25s;
+        }
+
+        .browse-btn:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 18px 45px rgba(56,189,248,.30);
+        }
+
+
+        /* =========================
+           STORE
+        ========================= */
+
+        #store {
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 40px 20px 80px;
+        }
+
+        .section-heading {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+        .section-heading h2 {
+
+            font-size: 2rem;
+
+            font-weight: 900;
+
+            margin-bottom: 7px;
+        }
+
+        .section-heading p {
+
+            color: var(--muted);
+
+            font-size: .9rem;
+        }
+
+
+        /* =========================
+           FILTER
+        ========================= */
+
+        .filters {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr
+                1fr;
+
+            gap: 14px;
+
+            margin-bottom: 35px;
+
+            padding: 18px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 20px;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .filter-box {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .filter-box label {
+
+            color: var(--muted);
+
+            font-size: .78rem;
+
+            font-weight: 700;
+        }
+
+        .filter-box input,
+        .filter-box select {
+
+            width: 100%;
+
+            border: 1px solid var(--border);
+
+            background: var(--input);
+
+            color: var(--text);
+
+            padding: 12px 13px;
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-size: .88rem;
+        }
+
+        .filter-box input:focus,
+        .filter-box select:focus {
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(56,189,248,.10);
+        }
+
+
+        /* =========================
+           PRODUCTS GRID
+        ========================= */
+
+        .products-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fill,minmax(280px,1fr));
+
+            gap: 23px;
+        }
+
+
+        /* =========================
+           PRODUCT CARD
+        ========================= */
+
+        .product-card {
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(15px);
+
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease,
+                border-color .3s ease;
+
+            animation: cardIn .5s ease both;
+        }
+
+        @keyframes cardIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover {
+
+            transform: translateY(-7px);
+
+            border-color:
+                rgba(56,189,248,.30);
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.28);
+        }
+
+
+        /* =========================
+           PRODUCT IMAGE
+        ========================= */
+
+        .main-image {
+
+            width: 100%;
+
+            height: 250px;
+
+            background: var(--input);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .main-image img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            transition: transform .5s ease;
+        }
+
+        .product-card:hover .main-image img {
+
+            transform: scale(1.05);
+        }
+
+        .image-number {
+
+            position: absolute;
+
+            top: 12px;
+            right: 12px;
+
+            padding: 5px 9px;
+
+            border-radius: 8px;
+
+            background: rgba(0,0,0,.55);
+
+            backdrop-filter: blur(8px);
+
+            color: white;
+
+            font-size: .7rem;
+        }
+
+
+        /* =========================
+           THUMBNAILS
+        ========================= */
+
+        .thumbnails {
+
+            display: flex;
+
+            gap: 7px;
+
+            padding: 10px 14px 0;
+        }
+
+        .thumb {
+
+            width: 48px;
+            height: 42px;
+
+            padding: 0;
+
+            overflow: hidden;
+
+            border-radius: 9px;
+
+            border: 2px solid var(--border);
+
+            background: transparent;
+
+            opacity: .65;
+
+            transition: .2s;
+        }
+
+        .thumb img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .thumb.active,
+        .thumb:hover {
+
+            opacity: 1;
+
+            border-color: var(--primary);
+        }
+
+
+        /* =========================
+           PRODUCT CONTENT
+        ========================= */
+
+        .product-content {
+
+            padding: 17px;
+        }
+
+        .product-name {
+
+            font-size: 1.2rem;
+
+            font-weight: 900;
+
+            margin-bottom: 7px;
+        }
+
+        .product-description {
+
+            color: var(--muted);
+
+            font-size: .84rem;
+
+            line-height: 1.8;
+
+            min-height: 48px;
+
+            margin-bottom: 12px;
+        }
+
+        .location {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            color: var(--primary);
+
+            font-size: .8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================
+           PRICE
+        ========================= */
+
+        .product-bottom {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding-top: 14px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .price-box span {
+
+            display: block;
+
+            color: var(--muted);
+
+            font-size: .7rem;
+        }
+
+        .price {
+
+            color: var(--primary);
+
+            font-size: 1.35rem;
+
+            font-weight: 900;
+        }
+
+
+        /* =========================
+           WHATSAPP
+        ========================= */
+
+        .contact-btn {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            border: none;
+
+            color: white;
+
+            background:
+                linear-gradient(135deg,#22c55e,#16a34a);
+
+            padding: 11px 15px;
+
+            border-radius: 11px;
+
+            font-size: .82rem;
+
+            font-weight: 800;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 8px 20px rgba(34,197,94,.18);
+
+            transition: .25s;
+        }
+
+        .contact-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(34,197,94,.30);
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: var(--muted);
+
+            background: var(--card);
+
+            border-radius: 20px;
+
+            border: 1px solid var(--border);
+        }
+
+        .empty-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            border-top: 1px solid var(--border);
+
+            background: var(--bg-secondary);
+
+            padding: 45px 20px 20px;
+
+            text-align: center;
+        }
+
+        .footer-logo {
+
+            font-size: 1.4rem;
+
+            font-weight: 900;
+
+            margin-bottom: 8px;
+
+            background: var(--gradient);
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        footer p {
+
+            max-width: 600px;
+
+            margin: auto;
+
+            color: var(--muted);
+
+            line-height: 1.8;
+
+            font-size: .85rem;
+        }
+
+        .copyright {
+
+            margin-top: 25px;
+
+            padding-top: 18px;
+
+            border-top: 1px solid var(--border);
+
+            color: var(--muted);
+
+            font-size: .75rem;
+        }
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+
+            position: fixed;
+
+            bottom: 25px;
+
+            right: 25px;
+
+            z-index: 3000;
+
+            background: var(--card-solid);
+
+            border: 1px solid var(--border);
+
+            padding: 13px 18px;
+
+            border-radius: 12px;
+
+            box-shadow: var(--shadow);
+
+            transform: translateY(100px);
+
+            opacity: 0;
+
+            transition: .3s;
+
+            font-size: .85rem;
+        }
+
+        .toast.show {
+
+            transform: translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:750px) {
+
+            .header-inner {
+                padding: 13px 15px;
+            }
+
+            .brand-text h1 {
+                font-size: 1rem;
+            }
+
+            .brand-text span {
+                font-size: .65rem;
+            }
+
+            .brand-logo {
+                width: 42px;
+                height: 42px;
+                border-radius: 13px;
+            }
+
+            .hero {
+                min-height: 500px;
+                padding-top: 55px;
+            }
+
+            .hero h2 {
+                font-size: 2.3rem;
+            }
+
+            .hero p {
+                font-size: .9rem;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                max-width: 500px;
+                width: 100%;
+                margin: auto;
+            }
+
+            .product-bottom {
+                align-items: flex-end;
+            }
+
+            .contact-btn {
+                padding: 11px 12px;
+            }
+
+            .toast {
+                right: 15px;
+                left: 15px;
+                bottom: 15px;
+                text-align: center;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="header-inner">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                📱
+            </div>
+
+            <div class="brand-text">
+
+                <h1>سوق الهواتف</h1>
+
+                <span>
+                    سوقك الموثوق للهواتف المستعملة
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="theme-btn"
+            id="themeButton"
+            onclick="toggleTheme()"
+            title="تغيير المظهر">
+
+            ☀️
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     WELCOME
+========================= -->
+
+<section class="hero" id="welcome">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            ✦ هواتف مستعملة بعناية
+        </div>
+
+        <h2>
+
+            هاتفك القادم
+            <br>
+
+            <span>بانتظارك هنا</span>
+
+        </h2>
+
+        <p>
+
+            اكتشف مجموعة من الهواتف المستعملة
+            مع معلومات واضحة عن الجهاز والسعر
+            والموقع، وتواصل مباشرة مع البائع.
+
+        </p>
+
+        <button
+            class="browse-btn"
+            onclick="openStore()">
+
+            تصفّح الهواتف
+            ←
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     STORE
+========================= -->
+
+<section id="store">
+
+    <div class="section-heading">
+
+        <h2>
+            الهواتف المتوفرة
+        </h2>
+
+        <p>
+            اختر الجهاز المناسب لميزانيتك وتواصل معنا مباشرة
+        </p>
+
+    </div>
+
+
+
+    <!-- FILTERS -->
+
+    <div class="filters">
+
+        <div class="filter-box">
+
+            <label>
+                💰 أعلى ميزانية
+            </label>
+
+            <input
+                type="number"
+                id="maxPrice"
+                placeholder="مثلاً 500"
+                oninput="filterProducts()">
+
+        </div>
+
+
+        <div class="filter-box">
+
+            <label>
+                🔎 البحث
+            </label>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="ابحث عن هاتف..."
+                oninput="filterProducts()">
+
+        </div>
+
+
+        <div class="filter-box">
+
+            <label>
+                ↕ ترتيب المنتجات
+            </label>
+
+            <select
+                id="sortSelect"
+                onchange="fil            --footer-text: #f8fafc;
             --modal-bg: #ffffff;
         }
 
